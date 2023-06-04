@@ -1,4 +1,4 @@
-.eslintrc.js
+.eslintrc.cjs
 .husky
 .idea
-.node_modules
+node_modules

@@ -1,4 +1,4 @@
-export default class Maze {
+export default class MazeGenerator {
   constructor(height, width) {
     this.height = height;
     this.width = width;
@@ -6,6 +6,9 @@ export default class Maze {
     this.maze = Array(height * 2 + 1)
       .fill(0)
       .map(() => Array(width * 2 + 1).fill(true));
+
+    this.maze[1][0] = false;
+    this.maze[height * 2 - 1][width * 2] = false;
 
     this.stack = [{ x: 1, y: 1 }];
   }
@@ -53,5 +56,6 @@ export default class Maze {
         this.stack.pop();
       }
     }
+    return this.maze;
   }
 }

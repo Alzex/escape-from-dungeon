@@ -1,7 +1,5 @@
-import Maze from './classes/mazeGenerator.js';
+import MazeGenerator from './classes/mazeGenerator.js';
 
-const maze = new Maze(10, 10);
+const mazeGenerator = new MazeGenerator(10, 10);
 
-maze.generate();
-
-console.log(maze.maze);
+console.log(mazeGenerator.generate());
