@@ -1,62 +1,63 @@
-import { PriorityQueue } from './priorityQueue';
-
-export class PathFinder {
+export default class MazeSolver {
   constructor(maze) {
     this.maze = maze;
+    this.start = { x: 1, y: 0 };
+    this.goal = { x: maze.length - 2, y: maze[0].length - 1 };
+    this.stack = [this.start];
+    this.visited = maze.map((row) => row.map(() => false));
+    this.predecessors = maze.map((row) => row.map(() => null));
+    this.visited[this.start.x][this.start.y] = true;
   }
 
-  heuristic(node, goal) {
-    let dx = Math.abs(node.x - goal.x);
-    let dy = Math.abs(node.y - goal.y);
-    return dx + dy; // Using Manhattan distance as heuristic
+  isValid(x, y) {
+    return x >= 0 && y >= 0 && x < this.maze.length && y < this.maze[0].length;
   }
 
-  aStarSearch(start = { x: 1, y: 1 }) {
-    if (!start) {
-      throw new Error('Start position must be provided');
-    }
-    const goal = { x: this.maze.width * 2 - 1, y: this.maze.height * 2 - 1 };
-    let frontier = new PriorityQueue();
-    frontier.enqueue(start, 0);
-
-    let cameFrom = {};
-    let costSoFar = {};
-
-    cameFrom[JSON.stringify(start)] = null;
-    costSoFar[JSON.stringify(start)] = 0;
-
-    while (!frontier.isEmpty()) {
-      let current = frontier.dequeue();
-
-      if (current.x === goal.x && current.y === goal.y) {
-        break;
+  getNeighbors(x, y) {
+    let result = [];
+    const directions = [
+      { x: x - 1, y: y },
+      { x: x + 1, y: y },
+      { x: x, y: y - 1 },
+      { x: x, y: y + 1 },
+    ];
+    directions.forEach((dir) => {
+      if (
+        this.isValid(dir.x, dir.y) &&
+        !this.maze[dir.x][dir.y] &&
+        !this.visited[dir.x][dir.y]
+      ) {
+        result.push(dir);
       }
+    });
+    return result;
+  }
 
-      this.maze.getNeighbors(current.x, current.y).forEach((next) => {
-        let newCost = costSoFar[JSON.stringify(current)] + 1;
-
-        if (
-          !costSoFar[JSON.stringify(next)] ||
-          newCost < costSoFar[JSON.stringify(next)]
-        ) {
-          costSoFar[JSON.stringify(next)] = newCost;
-          let priority = newCost + this.heuristic(next, goal);
-          frontier.enqueue(next, priority);
-          cameFrom[JSON.stringify(next)] = current;
-        }
+  solve() {
+    while (this.stack.length > 0) {
+      let currentCell = this.stack.pop();
+      this.visited[currentCell.x][currentCell.y] = true;
+      if (currentCell.x === this.goal.x && currentCell.y === this.goal.y) {
+        console.log('Goal reached!');
+        return true;
+      }
+      let neighbors = this.getNeighbors(currentCell.x, currentCell.y);
+      neighbors.forEach((neighbor) => {
+        this.stack.push(neighbor);
+        this.predecessors[neighbor.x][neighbor.y] = currentCell;
       });
     }
+    console.log('No path found');
+    return false;
+  }
 
-    // Constructing the path
-    let current = goal;
-    let path = [current];
-    while (current.x !== start.x || current.y !== start.y) {
-      if (!cameFrom[JSON.stringify(current)]) {
-        throw new Error('No path found from start to goal.');
-      }
-      current = cameFrom[JSON.stringify(current)];
-      path.unshift(current);
+  getPath() {
+    let path = [];
+    let currentCell = this.goal;
+    while (currentCell) {
+      path.push(currentCell);
+      currentCell = this.predecessors[currentCell.x][currentCell.y];
     }
-    return path;
+    return path.reverse();
   }
 }

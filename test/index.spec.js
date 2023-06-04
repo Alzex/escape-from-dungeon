@@ -1,13 +1,12 @@
 import MazeGenerator from '../src/classes/mazeGenerator.js';
-import { PathFinder } from '../src/classes/pathFinder.js';
+import MazeSolver from '../src/classes/pathFinder.js';
 
 describe('Maze Test', () => {
-  let maze, pathFinder;
+  let maze, solver;
 
   beforeEach(() => {
     maze = new MazeGenerator(10, 10);
-    maze.generate();
-    pathFinder = new PathFinder(maze);
+    solver = new MazeSolver(maze.generate());
   });
 
   describe('Maze Generator', () => {
@@ -18,7 +17,7 @@ describe('Maze Test', () => {
 
   describe('Path Finder', () => {
     test('should find a path', () => {
-      expect(pathFinder.aStarSearch()).toBeTruthy();
+      expect(solver.solve()).toBeTruthy();
     });
   });
 });
