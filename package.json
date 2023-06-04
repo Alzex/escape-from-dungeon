@@ -7,6 +7,7 @@
     "test": "jest",
     "prepare": "husky install"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
