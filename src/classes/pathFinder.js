@@ -11,7 +11,11 @@ export class PathFinder {
     return dx + dy; // Using Manhattan distance as heuristic
   }
 
-  aStarSearch(start, goal) {
+  aStarSearch(start = { x: 1, y: 1 }) {
+    if (!start) {
+      throw new Error('Start position must be provided');
+    }
+    const goal = { x: this.maze.width * 2 - 1, y: this.maze.height * 2 - 1 };
     let frontier = new PriorityQueue();
     frontier.enqueue(start, 0);
 
@@ -47,6 +51,9 @@ export class PathFinder {
     let current = goal;
     let path = [current];
     while (current.x !== start.x || current.y !== start.y) {
+      if (!cameFrom[JSON.stringify(current)]) {
+        throw new Error('No path found from start to goal.');
+      }
       current = cameFrom[JSON.stringify(current)];
       path.unshift(current);
     }
