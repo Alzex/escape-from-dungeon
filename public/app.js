@@ -1,10 +1,10 @@
 const socket = io();
 const generateButton = document.getElementById('generate');
-const widthInput = document.getElementById('width');
-const heightInput = document.getElementById('height');
+const levelInput = document.getElementById('level');
+const wrapper = document.getElementById('wrapper');
 
-let app = new PIXI.Application({ width: 800, height: 800 });
-document.body.appendChild(app.view);
+let app = new PIXI.Application({ width: 800, height: 800, backgroundAlpha: 0, });
+wrapper.appendChild(app.view);
 
 // Create the sprite and add it to the stage
 let wallTexture = PIXI.Texture.from('./assets/wall6.png');
@@ -15,15 +15,14 @@ let spaceTexture = PIXI.Texture.from('./assets/space.png');
 generateButton.onclick = () => {
   app.stage.removeChildren();
 
-  const width = parseInt(widthInput.value, 10);
-  const height = parseInt(heightInput.value, 10);
+  const level = parseInt(levelInput.value, 10);
 
-  if (isNaN(width) || isNaN(height) || width < 5 || height < 5 || width > 12 || height > 12 || width !== height) {
+  if (isNaN(level) || level < 5 || level > 12) {
     alert('Incorrect data');
     return;
   }
 
-  socket.emit('generate', { width, height });
+  socket.emit('generate', { width: level, height: level });
 
   socket.on('generationResult', ({ maze }) => {
     let cellSize = 30;
@@ -43,5 +42,3 @@ generateButton.onclick = () => {
     }
   });
 };
-
-document.body.appendChild(app.view);
