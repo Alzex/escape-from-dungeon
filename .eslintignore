@@ -2,3 +2,4 @@
 .husky
 .idea
 node_modules
+public

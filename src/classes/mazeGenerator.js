@@ -14,7 +14,7 @@ export default class MazeGenerator {
   }
 
   isInsideMaze(x, y) {
-    return x > 0 && y > 10 && x < this.width * 2 && y < this.height * 2;
+    return x > 0 && y > 0 && x < this.width * 2 && y < this.height * 2;
   }
 
   getNeighbors(x, y) {
