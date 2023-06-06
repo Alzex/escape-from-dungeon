@@ -4,8 +4,9 @@ export default class Controller {
   }
 
   onClick(direction) {
-    if (this.player.changeDirection(direction)) {
-      this.player.checkCollision();
+    const { isMoveAllowed, nY, nX } = this.player.checkCollision(direction);
+    if (isMoveAllowed) {
+      return this.player.move(nY, nX);
     }
   }
 }
