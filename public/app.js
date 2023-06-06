@@ -1,16 +1,22 @@
-const socket = io();
+/* eslint-disable no-undef */
+import PlayerRenderer from './js/playerRenderer.js';
+import MazeRenderer from './js/mazeRenderer.js';
+
 const generateButton = document.getElementById('generate');
 const levelInput = document.getElementById('level');
 const wrapper = document.getElementById('wrapper');
 
-let app = new PIXI.Application({ width: 800, height: 800, backgroundAlpha: 0, });
-wrapper.appendChild(app.view);
+const CELL_SIZE = 30;
 
-// Create the sprite and add it to the stage
-let wallTexture = PIXI.Texture.from('./assets/wall6.png');
-let spaceTexture = PIXI.Texture.from('./assets/space.png');
+const socket = io();
+const app = new PIXI.Application({
+  width: 800,
+  height: 800,
+  backgroundAlpha: 0,
+});
 
-
+const mazeRenderer = new MazeRenderer(app.stage, CELL_SIZE);
+const playerRenderer = new PlayerRenderer(app.stage, CELL_SIZE);
 
 generateButton.onclick = () => {
   app.stage.removeChildren();
@@ -22,23 +28,36 @@ generateButton.onclick = () => {
     return;
   }
 
-  socket.emit('generate', { width: level, height: level });
-
   socket.on('generationResult', ({ maze }) => {
-    let cellSize = 30;
-    for (let y = 0; y < maze.length; y++) {
-      for (let x = 0; x < maze[y].length; x++) {
-        let cellTexture = maze[y][x] ? wallTexture : spaceTexture;
-        let cellSprite = new PIXI.Sprite(cellTexture);
-        cellSprite.scale.set(0.2, 0.2);
-
-        // Position the sprite
-        cellSprite.x = x * cellSize;
-        cellSprite.y = y * cellSize;
-
-        // Add the sprite to the app
-        app.stage.addChild(cellSprite);
-      }
-    }
+    mazeRenderer.render(maze);
+    playerRenderer.init();
   });
+
+  socket.on('playerMove', ({ x, y }) => {
+    playerRenderer.updatePosition(x, y);
+  });
+
+  socket.emit('generate', { width: level, height: level });
 };
+
+document.body.onkeydown = (e) => {
+  if (e.key === 'Enter') {
+    generateButton.click();
+    return;
+  }
+  if (e.key === 'ArrowUp' || e.key === 'w') {
+    socket.emit('move', { direction: 'up' });
+    playerRenderer.updateDirection('up');
+  } else if (e.key === 'ArrowDown' || e.key === 's') {
+    socket.emit('move', { direction: 'down' });
+    playerRenderer.updateDirection('down');
+  } else if (e.key === 'ArrowLeft' || e.key === 'a') {
+    socket.emit('move', { direction: 'left' });
+    playerRenderer.updateDirection('left');
+  } else if (e.key === 'ArrowRight' || e.key === 'd') {
+    socket.emit('move', { direction: 'right' });
+    playerRenderer.updateDirection('right');
+  }
+};
+
+wrapper.appendChild(app.view);
