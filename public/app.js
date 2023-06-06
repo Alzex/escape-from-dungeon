@@ -28,12 +28,13 @@ generateButton.onclick = () => {
     return;
   }
 
-  socket.on('generationResult', ({ maze }) => {
+  socket.on('generationResult', ({ maze, controller }) => {
     mazeRenderer.render(maze);
-    playerRenderer.init();
+    playerRenderer.init(controller);
   });
 
   socket.on('playerMove', ({ x, y }) => {
+    if (!x || !y) return;
     playerRenderer.updatePosition(x, y);
   });
 
