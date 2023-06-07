@@ -1,8 +1,10 @@
 /* eslint-disable no-undef */
 import PlayerRenderer from './js/playerRenderer.js';
 import MazeRenderer from './js/mazeRenderer.js';
+import PathRenderer from './js/pathRenderer.js';
 
 const generateButton = document.getElementById('generate');
+const helpButton = document.getElementById('help');
 const levelInput = document.getElementById('level');
 const wrapper = document.getElementById('wrapper');
 
@@ -20,6 +22,8 @@ const playerRenderer = new PlayerRenderer(app.stage, CELL_SIZE);
 
 generateButton.onclick = () => {
   app.stage.removeChildren();
+  socket.removeAllListeners();
+  helpButton.disabled = false;
 
   const level = parseInt(levelInput.value, 10);
 
@@ -37,15 +41,32 @@ generateButton.onclick = () => {
     playerRenderer.init(controller);
   });
 
-  socket.on('playerMove', ({ x, y }) => {
+  socket.on('playerMove', ({ x, y, isWin }) => {
     if (!x || !y) return;
     playerRenderer.updatePosition(x, y);
+    if (isWin) {
+      alert('You win!');
+      generateButton.click();
+    }
   });
 
   socket.emit('generate', { width: level, height: level });
 };
 
+helpButton.onclick = () => {
+  const pathRenderer = new PathRenderer(app.stage, CELL_SIZE);
+  socket.removeAllListeners('helpResult');
+
+  socket.on('helpResult', ({ path }) => {
+    pathRenderer.render(path);
+  });
+
+  socket.emit('help');
+};
+
 document.body.onkeydown = (e) => {
+  if (e.repeat) return;
+
   if (e.key === 'Enter') {
     generateButton.click();
     return;

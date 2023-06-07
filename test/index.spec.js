@@ -1,5 +1,5 @@
 import MazeGenerator from '../src/classes/mazeGenerator.js';
-import MazeSolver from '../src/classes/pathFinder.js';
+import MazeSolver from '../src/classes/mazeSolver.js';
 
 describe('Maze Test', () => {
   let labyrinth, solver;
