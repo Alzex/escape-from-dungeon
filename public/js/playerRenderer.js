@@ -23,6 +23,7 @@ export default class PlayerRenderer {
     this.sprite.scale.set(0.1, 0.1);
     this.sprite.x = this.cellSize * 0.5;
     this.sprite.y = this.cellSize * 1.5;
+    this.sprite.zIndex = 1;
     this.stage.addChild(this.sprite);
   }
 

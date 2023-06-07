@@ -25,9 +25,17 @@ export default class Player {
     return false;
   }
 
+  #checkWin() {
+    if (this.y === this.maze.length - 2 && this.x === this.maze[0].length - 1)
+      return true;
+  }
+
   move(y, x) {
     this.y = y;
     this.x = x;
-    return { y, x };
+
+    const isWin = this.#checkWin();
+
+    return { y, x, isWin };
   }
 }
