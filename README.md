@@ -52,3 +52,4 @@ npm test
 - [Alex Zemlianskyi](https://github.com/Alzex)
 - [Denis Sherstiuk](https://github.com/gonnagetbetter)
 
+## [Design document](https://enigma-studios.gitbook.io/design-document-of-escape-from-dungeon-maze-game/)
