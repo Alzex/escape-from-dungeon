@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  efd-game:
+    build: .
+    container_name: efd-game
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app
