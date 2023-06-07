@@ -10,10 +10,10 @@ const CELL_SIZE = 30;
 
 const socket = io();
 const app = new PIXI.Application({
-  width: 800,
-  height: 800,
   backgroundAlpha: 0,
 });
+
+wrapper.appendChild(app.view);
 
 const mazeRenderer = new MazeRenderer(app.stage, CELL_SIZE);
 const playerRenderer = new PlayerRenderer(app.stage, CELL_SIZE);
@@ -29,6 +29,10 @@ generateButton.onclick = () => {
   }
 
   socket.on('generationResult', ({ maze, controller }) => {
+    app.renderer.resize(
+      (maze.length + 1) * CELL_SIZE,
+      (maze[0].length + 1) * CELL_SIZE,
+    );
     mazeRenderer.render(maze);
     playerRenderer.init(controller);
   });
@@ -60,5 +64,3 @@ document.body.onkeydown = (e) => {
     playerRenderer.updateDirection('right');
   }
 };
-
-wrapper.appendChild(app.view);
