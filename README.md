@@ -14,14 +14,28 @@ Then you have to choose one of two ways to run game: native or using Docker.
 
 ### Native
 To run game you have to install Node.js v18 or higher and npm.  
-Then you have to install dependencies using command `npm install`.  
-To run game use command `npm start`.
+Then you have to install dependencies using command 
+```bash
+npm install
+```
+To run game use command
+```bash
+npm start
+```
 
 ### Docker
 To run game using Docker you have to install Docker and Docker Compose.  
-Then you have to run command `docker-compose up`.
-
+Then you have to run command 
+```bash
+docker-compose up
+```
 The game will run in browser on http://localhost:3000/.
+
+## How  to test
+To run tests you have to:
+```bash
+npm test 
+```
 
 ## Requirements
 - Node.js v18 or higher
