@@ -70,7 +70,7 @@ body {
     background-size: cover;
     background-position: center;
     display: flex;
-    height: 100%;
+    height: 85%;
     owerflow-y: hidden;
 }
 
@@ -115,4 +115,20 @@ canvas {
     display: flex;
     text-align: center;
     align-items: center;
+}
+
+.logo-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo{
+    height: 90px;
+    width: auto;
+}
+
+input {
+    width: 251px;
+    height: auto;
 }

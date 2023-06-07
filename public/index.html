@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Escape from Dungeon</title>
+    <link rel="shortcut icon" type="image/png" href="assets/front1.png"/>
 </head>
 <link rel="stylesheet" href="style.css">
 <body>
 <div class="container">
+    <div class="logo-container">
+        <img src="svg/logo-no-background.svg" alt="logo" class="logo">
+    </div>
     <div class="row">
         <div class="left">
             <div class="data">
-                <input class="inp" id="level" type="number" value="12">
+                <input type="number" min="5" max="12" value="12" class="inp" id="level">
                 <button id="generate">Generate!</button>
                 <button id="help" disabled>Help</button>
             </div>
@@ -24,6 +28,6 @@
 </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://pixijs.download/release/pixi.js"></script>
+<script src="js/pixi.js"></script>
 <script type="module" src="app.js"></script>
 </html>
